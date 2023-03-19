@@ -17,7 +17,5 @@ jobs:
     - name: checking django server if it has no error
     - run: python manage.py runserver
     - name: pycodestyle check and download
-    - run: pip install pycodestyle
-    - run: pycodestyle *.py 
-    - run: echo everything is great ✅✅✅
+    - run: pip install pycodestyle ; pycodestyle *.py
     
