@@ -27,4 +27,4 @@ jobs:
         run: pip install -r requirements.txt
   
       - name: checking django server if it has no error
-        run: python manage.py runserver --noreload --timeout 300
+        run: python global_farmers/manage.py runserver --noreload --timeout 300
