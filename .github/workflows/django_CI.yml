@@ -9,18 +9,21 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: checkout v3
       - uses: actions/checkout@v3
     
       - name: pip upgrade
-      - run: python -m pip install --upgrade pip
+        run: python -m pip install --upgrade pip
       
       - name: requirements installation in django
-      - run: pip install -r requirements.txt
+        run: pip install -r requirements.txt
       
       - name: pycodestyle check and download
-      - run: pip install pycodestyle ; pycodestyle --statistics .
+        run: |
+          pip install pycodestyle
+          pycodestyle --statistics .
       
       - name: run Migrations
-      - run: python manage.py migrate --database=default
+        run: python manage.py migrate --database=default
       - name: checking django server if it has no error
-      - run: python manage.py runserver --noreload --timeout 300
+        run: python manage.py runserver --noreload --timeout 300
