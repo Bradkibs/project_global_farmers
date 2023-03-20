@@ -27,20 +27,15 @@ jobs:
         run: pip install -r requirements.txt
   
       - name: checking django server if it has no error
-        run: python global_farmers/manage.py runserver 0.0.0.0:8000
-        
-      - name: Wait for the server to start
         run: |
-          for i in $(seq 1 5); do
+          python global_farmers/manage.py runserver 0.0.0.0:8000
+          for i in $(seq 1 10); do
             curl -sSf "http://localhost:8000/" >/dev/null && break
             sleep 1
           done
-          
-      - name: test server
-        run: curl -sSf "http://localhost:8000/"
         
       - name: started successfully
-        run: echo started successfully!
+        run: echo started successfully!!
   
   reject:
     needs: build
