@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'auth_api',
     'product_api',
     'inspector_api',
+    'dashboard_api',
     'django_ratelimit',
 ]
 REST_FRAMEWORK = {
