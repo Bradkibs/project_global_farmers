@@ -14,4 +14,4 @@ class Product(models.Model):
     user_product_table = models.ManyToManyField(User)
 
     def __str__(self):
-        return f"{self.name} --> {self.quantity}, (mobile: {self.price}), {self.country}, {self.description}, {self.user_product_table.full_name}"
+        return f"{self.name} --> {self.quantity}, {self.price}, {self.description}"

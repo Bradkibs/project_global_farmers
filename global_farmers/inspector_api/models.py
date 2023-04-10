@@ -30,7 +30,7 @@ class InspectorProductRelation(models.Model):
     reviewed_at = models.DateTimeField(default=timezone.now, editable=False)
 
     def __str__(self):
-        return f'{self.inspector.full_name} - {self.product_inspected.name} - {self.comments} - {self.grade} - {self.status} - {self.restriction} - {self.reviewed_at}'
+        return f'{self.inspector.full_name}'
 
     class Meta:
         verbose_name = _('inspector_product_relation_table')

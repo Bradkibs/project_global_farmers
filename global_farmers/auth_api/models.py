@@ -69,7 +69,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.full_name} --> {self.government_id}, (mobile: {self.mobile_number}), {self.country}, {self.location}, {self.created_at}"
+        return f"{self.full_name}"
 
     objects = UserManager()
 
