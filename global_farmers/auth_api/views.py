@@ -1,6 +1,9 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
+from django.urls import reverse
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import get_user_model
 from .serializers import UserSerializer, LoginSerializer
@@ -36,6 +39,7 @@ class UserRegisterView(generics.CreateAPIView):
 class UserLoginView(generics.GenericAPIView):
     serializer_class = LoginSerializer
     permission_classes = [permissions.AllowAny]
+    authentication_classes = [JWTAuthentication]
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -47,6 +51,12 @@ class UserLoginView(generics.GenericAPIView):
             "access": str(refresh.access_token),
         }, status=status.HTTP_200_OK)
 
-        # redirect to the /dashboard endpoint
+        # redirect to the /dashboard endpoints
         response.set_cookie('jwt', str(refresh.access_token), httponly=True)
-        return redirect('dashboard')
+        if user.user_type == 'FARMER':
+            url = reverse('dashboard-farmer-view', kwargs={'pk': user.id})
+        elif user.user_type == 'BUYER':
+            url = reverse('dashboard-buyer-view', kwargs={'pk': user.id})
+        elif user.user_type == 'INSPECTOR':
+            url = reverse('dashboard-inspector-view', kwargs={'pk': user.id})
+        return redirect(url, response)
