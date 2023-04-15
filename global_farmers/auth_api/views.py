@@ -3,6 +3,7 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import get_user_model
@@ -52,7 +53,6 @@ class UserLoginView(generics.GenericAPIView):
         }, status=status.HTTP_200_OK)
 
         # redirect to the /dashboard endpoints
-        response.set_cookie('jwt', str(refresh.access_token), httponly=True)
         if user.user_type == 'FARMER':
             url = reverse('dashboard-farmer-view', kwargs={'pk': user.id})
         elif user.user_type == 'BUYER':
@@ -60,3 +60,20 @@ class UserLoginView(generics.GenericAPIView):
         elif user.user_type == 'INSPECTOR':
             url = reverse('dashboard-inspector-view', kwargs={'pk': user.id})
         return redirect(url, response)
+
+
+class UserLogoutView(APIView):
+    authentication_classes = [JWTAuthentication]
+
+    def post(self, request):
+        refresh_token = request.data.get('refresh_token')
+
+        if refresh_token:
+            try:
+                token = RefreshToken(refresh_token)
+                token.blacklist()
+            except Exception as e:
+                return Response({'error': str(e)}, status=400)
+            return Response(status=204)
+        else:
+            return Response({'error': 'Refresh token is required'}, status=400)
